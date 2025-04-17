@@ -16,3 +16,18 @@ class Property(models.Model):
 
     def __str__(self):
         return self.title
+
+class Booking(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Ожидание'),
+        ('confirmed', 'Подтверждено'),
+        ('cancelled', 'Отменено'),
+    ]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    property = models.ForeignKey('Property', on_delete=models.CASCADE)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} → {self.property.title} [{self.status}]"

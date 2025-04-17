@@ -1,6 +1,7 @@
 from django import forms
-from .models import Property
+from .models import Property, Booking
 
+# Форма для объявления
 class PropertyForm(forms.ModelForm):
     class Meta:
         model = Property
@@ -11,3 +12,9 @@ class PropertyForm(forms.ModelForm):
         if price <= 0:
             raise forms.ValidationError("Цена должна быть положительной")
         return price
+
+# Форма для бронирования
+class BookingForm(forms.ModelForm):
+    class Meta:
+        model = Booking
+        fields = ['property', 'status']  # поля, которые можно выбирать вручную
