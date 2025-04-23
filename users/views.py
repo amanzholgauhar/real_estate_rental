@@ -34,13 +34,14 @@ def register_view(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
+            user.set_password(form.cleaned_data['password'])  # Хэширование пароля
             user.save()
-            return redirect('login')  # или 'profile'
+            return redirect('login')  # Перенаправление на страницу логина после регистрации
     else:
         form = RegisterForm()
-    
+
     return render(request, 'users/register.html', {'form': form})
+
 
 from django.contrib.auth import authenticate, login
 from .forms import LoginForm
@@ -101,19 +102,21 @@ class ChangePasswordAPIView(APIView):
             old_password = serializer.validated_data['old_password']
             new_password = serializer.validated_data['new_password']
 
+            # Проверка старого пароля
             if not user.check_password(old_password):
-                return Response({'error': 'Старый пароль неверен.'}, status=400)
+                return Response({'error': 'Старый пароль неверен.'}, status=status.HTTP_400_BAD_REQUEST)
 
             try:
+                # Валидация нового пароля
                 validate_password(new_password, user=user)
             except Exception as e:
-                return Response({'error': e.messages}, status=400)
+                return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
             user.set_password(new_password)
             user.save()
-            return Response({'message': 'Пароль успешно изменён.'}, status=200)
+            return Response({'message': 'Пароль успешно изменён.'}, status=status.HTTP_200_OK)
 
-        return Response(serializer.errors, status=400)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # 🔹 Восстановление пароля по email
