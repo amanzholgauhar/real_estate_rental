@@ -1,10 +1,48 @@
 {% extends 'base.html' %}
 
+{% block title %}Create Booking{% endblock %}
+
 {% block content %}
-<h2>Бронирование</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Забронировать</button>
-</form>
+<div class="max-w-xl mx-auto bg-gray-450 shadow-md rounded-lg p-8 mt-10">
+  <h2 class="text-3xl font-semibold text-center text-blue-600 mb-6">Booking Form</h2>
+
+  <!-- Форма бронирования -->
+  <form method="post" class="space-y-6">
+    {% csrf_token %}
+    
+    <!-- Отображение ошибок формы -->
+    <div class="text-sm text-red-600">
+      {{ form.non_field_errors }}
+    </div>
+
+    <!-- Перебор полей формы с ошибками -->
+    {% for field in form %}
+      <div>
+        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+        <div class="mt-1">
+          {{ field }} <!-- Отображение поля формы -->
+        </div>
+        
+        <!-- Ошибки для конкретного поля -->
+        {% if field.errors %}
+          <p class="text-sm text-red-600 mt-1">{{ field.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <!-- Кнопка отправки формы -->
+    <div class="text-center">
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+        Book Now
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Back to Property List -->
+<div class="mt-6 text-center">
+  <a href="{% url 'property_list' %}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded transition duration-300">
+    Back to Property List
+  </a>
+</div>
 {% endblock %}

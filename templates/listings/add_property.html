@@ -1,9 +1,46 @@
 {% extends 'base.html' %}
+
+{% block title %}Add Property{% endblock %}
+
 {% block content %}
-  <h2>Добавить объявление</h2>
-  <form method="post" enctype="multipart/form-data">
+<div class="max-w-3xl mx-auto bg-gray-400 shadow-md rounded-lg mt-10 p-8">
+  <h2 class="text-3xl font-semibold text-center text-blue-600 mb-6">Add New Property</h2>
+  <form method="post" enctype="multipart/form-data" class="space-y-6">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Сохранить</button>
+    
+    <!-- Общие ошибки формы -->
+    <div class="text-sm text-red-600">
+      {{ form.non_field_errors }}
+    </div>
+
+    <!-- Перебор всех полей формы -->
+    {% for field in form %}
+      <div>
+        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+        <div class="mt-1">
+          {{ field }} <!-- Отображение поля формы -->
+        </div>
+        
+        <!-- Ошибки для каждого поля -->
+        {% if field.errors %}
+          <p class="text-sm text-red-600 mt-1">{{ field.errors|join:", " }}</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+
+    <!-- Кнопка отправки формы -->
+    <div class="text-center">
+      <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300">
+        Save Property
+      </button>
+    </div>
   </form>
+</div>
+
+<!-- Back to Property List -->
+<div class="mt-6 text-center">
+  <a href="{% url 'property_list' %}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded transition duration-300">
+    Back to Property List
+  </a>
+</div>
 {% endblock %}

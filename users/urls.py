@@ -5,6 +5,8 @@ from .views import (
     RegisterAPIView, ProfileAPIView, ChangePasswordAPIView,
     PasswordResetRequestView, register_view, login_view, profile_view, LogoutView
 )
+from .views import logout_view
+
 
 urlpatterns = [
     # API 
@@ -19,5 +21,6 @@ urlpatterns = [
     path('register/form/', register_view, name='register'),
     path('login/form', login_view, name='login'),
 
-     path('logout/', LogoutView.as_view(), name='logout'),
+    path('logout/', logout_view, name='logout'),
+
 ]

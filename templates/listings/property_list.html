@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Property Listings{% endblock %}
+
+{% block content %}
+<div class="flex justify-between">
+    <!-- Filters Section -->
+    <div class="w-1/4 bg-white p-6 shadow-md rounded-lg">
+        <h2 class="text-xl font-semibold text-blue-600 mb-4">Filters</h2>
+        <form method="get" action="{% url 'property_list' %}" class="space-y-4">
+            <div>
+                <label for="search" class="text-sm font-medium text-gray-700">Search</label>
+                <input type="text" name="search" id="search" value="{{ request.GET.search }}" class="w-full mt-1 px-4 py-2 border rounded-lg" placeholder="Search for a property" />
+            </div>
+            <div>
+                <label for="price" class="text-sm font-medium text-gray-700">Max Price</label>
+                <input type="number" name="price" id="price" value="{{ request.GET.price }}" class="w-full mt-1 px-4 py-2 border rounded-lg" placeholder="Max price" />
+            </div>
+            <div>
+                <label for="location" class="text-sm font-medium text-gray-700">Location</label>
+                <input type="text" name="location" id="location" value="{{ request.GET.location }}" class="w-full mt-1 px-4 py-2 border rounded-lg" placeholder="Location" />
+            </div>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-4 transition duration-300">
+                Apply Filters
+            </button>
+        </form>
+    </div>
+
+    <!-- Property List Section -->
+    <div class="w-3/4">
+        <h2 class="text-2xl font-semibold text-blue-600 mb-4">Available Properties</h2>
+        <div class="grid grid-cols-3 gap-6">
+            {% for property in properties %}
+            <div class="bg-white shadow-md rounded-lg p-4">
+                <img src="{{ property.image.url }}" alt="{{ property.title }}" class="w-full h-32 object-cover rounded-lg mb-4" />
+                <h3 class="text-lg font-semibold">{{ property.title }}</h3>
+                <p class="text-sm text-gray-600">{{ property.location }}</p>
+                <p class="text-sm text-gray-600">{{ property.price }} ₸</p>
+                <a href="{% url 'property-detail' property.id %}" class="text-blue-600 hover:text-blue-800 mt-4 block">View Details</a>
+            </div>
+            {% empty %}
+            <p class="text-center text-gray-600">No properties found.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- listings/property_list.html -->
+<img src="{{ property.image.url if property.image else '/static/default_image.jpg' }}" 
+     alt="{{ property.title }}" 
+     class="w-full h-32 object-cover rounded-lg mb-4" />
+
+{% endblock %}
