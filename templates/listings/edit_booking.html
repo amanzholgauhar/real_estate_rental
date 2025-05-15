@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Edit Booking{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto bg-white shadow-lg rounded-lg mt-10 p-8">
+  <h2 class="text-3xl font-semibold text-center text-blue-600 mb-6">Edit Booking</h2>
+  <form method="post" class="space-y-6">
+    {% csrf_token %}
+
+    {{ form.property }}       {# это HiddenInput, так что не видно #}
+    {{ form.non_field_errors }}
+
+    <div>
+      <label for="{{ form.status.id_for_label }}" 
+             class="block text-sm font-medium text-gray-700">
+        Status
+      </label>
+      {{ form.status }}
+      {% if form.status.errors %}
+        <p class="text-sm text-red-600 mt-1">{{ form.status.errors.0 }}</p>
+      {% endif %}
+    </div>
+
+    <div class="text-center">
+      <button type="submit" 
+              class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition">
+        Save
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

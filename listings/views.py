@@ -272,3 +272,54 @@ def property_list_view(request):
 def logout_view(request):
     logout(request)  # Завершаем сессию пользователя
     return redirect('login')  # Перенаправляем на страницу логина
+    
+
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.conf import settings
+from .models import Property, Booking
+
+@login_required
+def quick_booking(request):
+    prop_id = request.GET.get('property_id')
+    if not prop_id:
+        return redirect('property_list')
+
+    prop = get_object_or_404(Property, id=prop_id)
+    booking = Booking.objects.create(
+        user=request.user,
+        property=prop,
+        status='pending'          # автоматически «Ожидание»
+    )
+
+    # Отправка письма
+    send_mail(
+        subject="Бронирование принято",
+        message=f"Ваше бронирование для '{prop.title}' успешно создано.",
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=[request.user.email],
+    )
+
+    return redirect('my_bookings')
+@login_required
+def my_bookings_view(request):
+    # показываем только НЕ отменённые брони
+    bookings = Booking.objects.filter(
+        user=request.user
+    ).exclude(
+        status='cancelled'
+    ).select_related('property')
+    return render(request, 'listings/my_bookings.html', {'bookings': bookings})
+
+@login_required
+def edit_booking_view(request, pk):
+    booking = get_object_or_404(Booking, pk=pk, user=request.user)
+    if request.method == 'POST':
+        form = BookingForm(request.POST, instance=booking)
+        if form.is_valid():
+            form.save()
+            return redirect('my_bookings')
+    else:
+        form = BookingForm(instance=booking)
+    return render(request, 'listings/edit_booking.html', {'form': form})

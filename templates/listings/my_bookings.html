@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}My Bookings{% endblock %}
+{% block content %}
+<div class="max-w-3xl mx-auto mt-10">
+  <h2 class="text-3xl font-semibold text-blue-600 mb-6 text-center">My Bookings</h2>
+  <div class="space-y-4">
+    {% for b in bookings %}
+    <div class="p-4 bg-white rounded-lg shadow flex justify-between items-center">
+      <div>
+        <p class="font-medium">{{ b.property.title }}</p>
+        <p class="text-sm text-gray-600">{{ b.get_status_display }}</p>
+        <p class="text-xs text-gray-500">{{ b.created_at|date:"d M Y H:i" }}</p>
+      </div>
+      <a href="{% url 'edit_booking' b.pk %}"
+         class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded">Edit</a>
+    </div>
+    {% empty %}
+      <p class="text-center text-gray-500">Нет бронирований.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

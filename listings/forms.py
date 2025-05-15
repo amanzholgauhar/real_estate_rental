@@ -40,16 +40,20 @@ class PropertyForm(forms.ModelForm):
         
         return cleaned_data
 
-# Форма для бронирования
 class BookingForm(forms.ModelForm):
     class Meta:
         model = Booking
-        fields = ['property', 'status']  # поля, которые можно выбирать вручную
+        fields = ['property', 'status']
+        widgets = {
+            'status': forms.Select(),  # по умолчанию Select, но мы добавим attrs ниже
+        }
 
-    def clean(self):
-        cleaned_data = super().clean()
-        property_obj = cleaned_data.get("property")
-        if not property_obj:
-            raise forms.ValidationError("Вы должны выбрать объявление для бронирования.")
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # скрываем выбор property (он уже заполнен из GET)
+        self.fields['property'].widget = forms.HiddenInput()
+        # задаём классы для <select name="status">
+        self.fields['status'].widget.attrs.update({
+            'class': 'mt-1 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500'
+        })
 
-        return cleaned_data

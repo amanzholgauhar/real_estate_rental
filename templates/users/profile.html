@@ -21,17 +21,17 @@
   </div>
 
   <!-- Buttons for navigation -->
-  <div class="mt-6 text-center">
-    <a href="{% url 'property_list' %}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded transition duration-300 mr-2">
-      View Properties
-    </a>
-    <a href="{% url 'add_property' %}" class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition duration-300 mr-2">
+  <div class="mt-6 text-center space-x-4">
+    <a href="{% url 'add_property' %}"
+       class="inline-block bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded transition duration-300">
       Add Property
     </a>
-    <a href="{% url 'create_booking' %}" class="inline-block bg-yellow-600 hover:bg-yellow-700 text-white font-semibold py-2 px-4 rounded transition duration-300">
-      Create Booking
+    <a href="{% url 'my_bookings' %}"
+       class="inline-block bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded transition duration-300">
+      My Bookings
     </a>
-    <a href="{% url 'logout' %}" class="inline-block bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-300 mt-4">
+    <a href="{% url 'logout' %}"
+       class="inline-block bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded transition duration-300">
       Logout
     </a>
   </div>
