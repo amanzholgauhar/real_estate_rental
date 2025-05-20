@@ -1,3 +1,5 @@
+# listings/models.py
+
 from django.db import models
 from django.conf import settings
 
@@ -6,10 +8,17 @@ class Property(models.Model):
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
     location = models.CharField(max_length=255)
+    # Добавлено поле для номера телефона арендодателя
+    phone_number = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        help_text="Введите номер телефона в формате +77171234567"
+    )
     image = models.ImageField(upload_to='property_images/', null=True, blank=True)
-    
+
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, 
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='properties'
     )
@@ -17,9 +26,10 @@ class Property(models.Model):
     def __str__(self):
         return self.title
 
+
 class Booking(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Ожидание'),
+        ('pending',   'Ожидание'),
         ('confirmed', 'Подтверждено'),
         ('cancelled', 'Отменено'),
     ]

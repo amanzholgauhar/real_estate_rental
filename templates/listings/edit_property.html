@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}Add Property{% endblock %}
+{% block title %}Edit Property{% endblock %}
 
 {% block content %}
 <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg mt-10 p-8">
-  <h2 class="text-3xl font-semibold text-center text-blue-600 mb-6">Add New Property</h2>
+  <h2 class="text-3xl font-semibold text-center text-blue-600 mb-6">Edit Property</h2>
   <form method="post" enctype="multipart/form-data" class="space-y-6">
     {% csrf_token %}
     {{ form.non_field_errors }}
@@ -14,7 +14,7 @@
           {{ field.label }}
         </label>
         <div class="mt-1">
-          {{ field }}  {# теперь у всех полей есть border-black #}
+          {{ field }}
         </div>
         {% if field.help_text %}
           <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
@@ -25,11 +25,19 @@
       </div>
     {% endfor %}
 
-    <div class="text-center">
+    <div class="flex justify-between items-center">
       <button type="submit"
-              class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition">
-        Save Property
+              class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition">
+        Save Changes
       </button>
+
+      <form method="post" action="{% url 'delete_property' property.pk %}">
+        {% csrf_token %}
+        <button type="submit"
+                class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg transition">
+          Delete Property
+        </button>
+      </form>
     </div>
   </form>
 

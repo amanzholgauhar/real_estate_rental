@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Delete Property{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto bg-white shadow-lg rounded-lg mt-10 p-8">
+  <h2 class="text-2xl font-semibold text-center text-red-600 mb-6">Delete Property</h2>
+  <p class="text-center mb-6">
+    Are you sure you want to delete the add<br><strong>"{{ property.title }}"</strong>?
+  </p>
+  <div class="flex justify-center space-x-4">
+    <form method="post">
+      {% csrf_token %}
+      <button type="submit"
+              class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg">
+        Yes, delete
+      </button>
+    </form>
+    <a href="{% url 'edit_property' property.pk %}"
+       class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-lg">
+      Cancel
+    </a>
+  </div>
+</div>
+{% endblock %}
