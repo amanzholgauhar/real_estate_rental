@@ -1,4 +1,4 @@
-# users/views.py
+# real_estate_rental/users/views.py
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
@@ -103,20 +103,17 @@ def password_reset_confirm_view(request, uidb64, token):
     user = None
     validlink = False
 
-    # 1) Декодируем uid и получаем пользователя
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = User.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
-    # 2) Проверяем токен
     if user and default_token_generator.check_token(user, token):
         validlink = True
     else:
         error = "Ссылка устарела или неверна."
 
-    # 3) Если форма отправлена и ссылка валидна — сохраняем новый пароль
     if request.method == 'POST' and validlink:
         new_password = request.POST.get('new_password')
         try:
@@ -126,7 +123,6 @@ def password_reset_confirm_view(request, uidb64, token):
             login(request, user)
             return redirect('profile_view')
         except Exception as e:
-            # Собираем все сообщения об ошибках в одну строку
             if hasattr(e, 'messages'):
                 error = " ".join(e.messages)
             else:
@@ -146,15 +142,23 @@ class RegisterAPIView(generics.CreateAPIView):
 
 
 class ProfileAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    # убрали автоматическую проверку IsAuthenticated
+    permission_classes = []
 
     def get(self, request):
         user = request.user
+        # Если не аутентифицирован — вернуть 401
+        if not user or not user.is_authenticated:
+            return Response(
+                {'detail': 'Authentication credentials were not provided.'},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+        # Иначе вернуть данные профиля
         return Response({
             'username': user.username,
-            'email': user.email,
-            'role': user.role
-        })
+            'email':    user.email,
+            'role':     getattr(user, 'role', None)
+        }, status=status.HTTP_200_OK)
 
 
 class ChangePasswordAPIView(APIView):
