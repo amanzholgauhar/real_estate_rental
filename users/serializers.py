@@ -1,11 +1,10 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework.validators import UniqueValidator
-import re  # добавлено для валидации пароля
+import re
 
 User = get_user_model()
 
-# 🔐 Регистрация
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
@@ -17,16 +16,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ('username', 'email', 'password', 'role')
 
-    # ✅ Валидация пароля
     def validate_password(self, value):
         if len(value) < 8:
             raise serializers.ValidationError("Пароль должен содержать минимум 8 символов.")
         if not re.search(r'\d', value):
             raise serializers.ValidationError("Пароль должен содержать хотя бы одну цифру.")
-        if not re.search(r'[A-Z]', value):
-            raise serializers.ValidationError("Пароль должен содержать хотя бы одну заглавную букву.")
-        if not re.search(r'[a-z]', value):
-            raise serializers.ValidationError("Пароль должен содержать хотя бы одну строчную букву.")
+        if not re.search(r'[A-Za-z]', value):
+            raise serializers.ValidationError("Пароль должен содержать хотя бы одну букву.")
         return value
 
     def create(self, validated_data):
@@ -39,7 +35,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-# 🔑 Вход
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
@@ -50,15 +45,12 @@ class LoginSerializer(serializers.Serializer):
             return user
         raise serializers.ValidationError("Неверные данные для входа.")
 
-
-# 👤 Профиль пользователя
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'role']
 
 
-# 🔁 Смена пароля
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
