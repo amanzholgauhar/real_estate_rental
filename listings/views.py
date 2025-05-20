@@ -36,9 +36,7 @@ class PropertyListCreateAPIView(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class PropertyRetrieveUpdateDestroyAPIView(
-    generics.RetrieveUpdateDestroyAPIView
-):
+class PropertyRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PropertySerializer
     permission_classes = [IsAuthenticated]
 
@@ -47,16 +45,12 @@ class PropertyRetrieveUpdateDestroyAPIView(
 
     def perform_update(self, serializer):
         if serializer.instance.user != self.request.user:
-            raise PermissionDenied(
-                "You do not have permission to edit this property."
-            )
+            raise PermissionDenied("You do not have permission to edit this property.")
         serializer.save()
 
     def perform_destroy(self, instance):
         if instance.user != self.request.user:
-            raise PermissionDenied(
-                "You do not have permission to delete this property."
-            )
+            raise PermissionDenied("You do not have permission to delete this property.")
         instance.delete()
 
 
@@ -71,6 +65,7 @@ def add_property_view(request):
             return redirect("property_list")
     else:
         form = PropertyForm()
+
     return render(request, "listings/add_property.html", {"form": form})
 
 
@@ -84,11 +79,8 @@ def edit_property_view(request, pk):
             return redirect("property_list")
     else:
         form = PropertyForm(instance=prop)
-    return render(
-        request,
-        "listings/edit_property.html",
-        {"form": form, "property": prop},
-    )
+
+    return render(request, "listings/edit_property.html", {"form": form, "property": prop})
 
 
 @login_required
@@ -97,11 +89,7 @@ def delete_property_view(request, pk):
     if request.method == "POST":
         prop.delete()
         return redirect("property_list")
-    return render(
-        request,
-        "listings/delete_property_confirm.html",
-        {"property": prop},
-    )
+    return render(request, "listings/delete_property_confirm.html", {"property": prop})
 
 
 def property_list_view(request):
@@ -125,11 +113,7 @@ def property_list_view(request):
         except ValueError:
             pass
 
-    return render(
-        request,
-        "listings/property_list.html",
-        {"properties": properties},
-    )
+    return render(request, "listings/property_list.html", {"properties": properties})
 
 
 @login_required
@@ -144,9 +128,15 @@ def create_booking(request):
             booking = form.save(commit=False)
             booking.user = request.user
             booking.save()
+
+            # разбиваем длинное сообщение на две строки
+            message = (
+                f"Your booking for '{booking.property.title}' "
+                "has been successfully created."
+            )
             send_mail(
                 subject="Booking Confirmed",
-                message=f"Your booking for '{booking.property.title}' has been successfully created.",
+                message=message,
                 from_email=settings.DEFAULT_FROM_EMAIL,
                 recipient_list=[request.user.email],
             )
@@ -154,11 +144,7 @@ def create_booking(request):
     else:
         form = BookingForm(initial=initial)
 
-    return render(
-        request,
-        "listings/create_booking.html",
-        {"form": form},
-    )
+    return render(request, "listings/create_booking.html", {"form": form})
 
 
 @login_required
@@ -168,9 +154,14 @@ def quick_booking(request):
         return redirect("property_list")
     prop = get_object_or_404(Property, pk=prop_id)
     Booking.objects.create(user=request.user, property=prop, status="pending")
+
+    message = (
+        f"Your booking for '{prop.title}' "
+        "has been successfully created."
+    )
     send_mail(
         subject="Booking Confirmed",
-        message=f"Your booking for '{prop.title}' has been successfully created.",
+        message=message,
         from_email=settings.DEFAULT_FROM_EMAIL,
         recipient_list=[request.user.email],
     )
@@ -184,11 +175,7 @@ def my_bookings_view(request):
         .exclude(status="cancelled")
         .select_related("property")
     )
-    return render(
-        request,
-        "listings/my_bookings.html",
-        {"bookings": bookings},
-    )
+    return render(request, "listings/my_bookings.html", {"bookings": bookings})
 
 
 @login_required
@@ -201,8 +188,5 @@ def edit_booking_view(request, pk):
             return redirect("my_bookings")
     else:
         form = BookingForm(instance=booking)
-    return render(
-        request,
-        "listings/edit_booking.html",
-        {"form": form},
-    )
+
+    return render(request, "listings/edit_booking.html", {"form": form})
