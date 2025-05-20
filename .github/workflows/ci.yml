@@ -5,27 +5,29 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+
+env:
+  # Переназначаем параметры БД из CI
+  DB_ENGINE: django.db.backends.postgresql
+  DB_NAME: test_real_estate_db
+  DB_USER: postgres
+  DB_PASSWORD: postgres
+  DB_HOST: 127.0.0.1
+  DB_PORT: 5432
+
 jobs:
   format:
     name: Format & Lint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Setup Python
+      - uses: actions/checkout@v3
+      - name: Set up Python
         uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
-
+        with: { python-version: '3.x' }
       - name: Install formatting tools
         run: |
           python -m pip install --upgrade pip
           pip install autoflake isort black flake8
-
-      - name: Ensure format.sh is executable
-        run: git update-index --chmod=+x scripts/format.sh
-
       - name: Run formatting script
         run: scripts/format.sh
 
@@ -33,20 +35,43 @@ jobs:
     name: Run Django tests
     runs-on: ubuntu-latest
     needs: format
+
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_real_estate_db
+        ports:
+          - 5432:5432
+        # ждём, пока Postgres не станет готов
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
+        with: { python-version: '3.x' }
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
-          # if you still need pytest:
           pip install pytest
 
       - name: Run Django built-in tests
+        env:
+          # прокидываем в Django settings
+          DB_ENGINE: ${{ env.DB_ENGINE }}
+          DB_NAME:   ${{ env.DB_NAME }}
+          DB_USER:   ${{ env.DB_USER }}
+          DB_PASSWORD: ${{ env.DB_PASSWORD }}
+          DB_HOST:   ${{ env.DB_HOST }}
+          DB_PORT:   ${{ env.DB_PORT }}
         run: python manage.py test --verbosity=2
