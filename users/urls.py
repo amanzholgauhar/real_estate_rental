@@ -5,7 +5,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .views import (
     RegisterAPIView,
-    ProfileAPIView,
     ChangePasswordAPIView,
     PasswordResetRequestView,
     password_reset_form_view,
