@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ property.title }}{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto mt-10">
+
+  <!-- КАРТОЧКА ОБЪЕКТА -->
+  <div class="p-6 bg-white shadow rounded-lg">
+    <h1 class="text-2xl font-bold mb-2">{{ property.title }}</h1>
+    <p class="text-gray-600 mb-4">{{ property.description }}</p>
+
+    <!-- Средний рейтинг -->
+    <p class="mt-2 font-medium">
+      Average Rating:
+      {% if avg_rating %}
+        {{ avg_rating|floatformat:1 }} ⭐
+      {% else %}
+        No reviews yet
+      {% endif %}
+    </p>
+  </div>
+
+  <!-- РАЗДЕЛ ОТЗЫВОВ -->
+  <div class="mt-8">
+    <h2 class="text-xl font-semibold mb-4">Reviews</h2>
+    <ul class="space-y-4">
+      {% for rev in property.reviews.all %}
+        <li class="border border-gray-200 rounded p-4">
+          <div class="flex justify-between items-center">
+            <strong>{{ rev.user.username }}</strong>
+            <span>{{ rev.rating }} ⭐</span>
+          </div>
+          <p class="mt-2">{{ rev.comment }}</p>
+          <small class="text-gray-500">
+            {{ rev.created_at|date:"SHORT_DATETIME_FORMAT" }}
+          </small>
+
+          {% if request.user == rev.user %}
+            <div class="mt-2 text-right">
+              <a href="{% url 'edit_review' rev.pk %}"
+                 class="text-blue-600 hover:underline text-sm">
+                Edit your review
+              </a>
+            </div>
+          {% endif %}
+        </li>
+      {% empty %}
+        <li class="text-gray-500">No reviews yet.</li>
+      {% endfor %}
+    </ul>
+
+    {% if request.user.is_authenticated and not user_review %}
+      <div class="mt-6">
+        <a href="{% url 'create_review' property.pk %}"
+           class="inline-block bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded">
+          Leave a review
+        </a>
+      </div>
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

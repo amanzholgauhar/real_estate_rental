@@ -5,12 +5,25 @@ from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 
 from .models import Booking, Property
+from .models import Review
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['rating', 'comment']
+        widgets = {
+            'rating': forms.Select(
+                choices=[(i, f"{i} ⭐") for i in range(1,6)],
+                attrs={'class': 'w-full border border-gray-300 rounded p-2'}
+            ),
+            'comment': forms.Textarea(
+                attrs={'class': 'w-full border border-gray-300 rounded p-2', 'rows': 4}
+            ),
+        }
 
 
 def max_size_validator(limit_value):
-    """
-    Returns a validator that ensures uploaded file is not larger than limit_value bytes.
-    """
+
     def validator(value):
         size_mb = limit_value / (1024 * 1024)
         if value.size > limit_value:
@@ -45,7 +58,6 @@ class PropertyForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # общие атрибуты для всех полей
         for field in self.fields.values():
             field.widget.attrs.update(
                 {"class": "w-full px-3 py-2 border border-black rounded"}
@@ -82,9 +94,7 @@ class BookingForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # скрываем поле с объявлением (оно передаётся через GET)
         self.fields["property"].widget = forms.HiddenInput()
-        # класс для select
         self.fields["status"].widget.attrs.update(
             {
                 "class": (
