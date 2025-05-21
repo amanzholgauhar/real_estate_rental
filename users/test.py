@@ -18,12 +18,12 @@ class UserTests(TestCase):
         self.user = User.objects.create_user(**self.user_data)
 
     def test_register_user(self):
-        url = reverse('register')  # Исправьте на 'register' вместо 'register_form'
+        url = reverse('register')  
         data = {
             'username': 'newuser',
             'email': 'newuser@example.com',
             'password': 'password123',
-            'role': 'tenant',  # или 'landlord'
+            'role': 'tenant',  
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -53,7 +53,7 @@ class UserTests(TestCase):
         self.assertTrue(self.user.check_password('newpassword123'))
 
     def test_profile(self):
-        url = reverse('profile')  # Исправьте на 'profile' вместо 'profile_form'
+        url = reverse('profile') 
         self.client.login(username=self.user_data['username'], password=self.user_data['password'])
         response = self.client.get(url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)

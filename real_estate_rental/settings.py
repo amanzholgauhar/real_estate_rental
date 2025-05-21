@@ -1,15 +1,11 @@
-# real_estate_rental/real_estate_rental/settings.py
-
 import os
 from pathlib import Path
 from datetime import timedelta
 
 from dotenv import load_dotenv
 
-# Load .env into environment
 load_dotenv()
 
-# BASE_DIR points to the project root (where manage.py lives)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -114,15 +110,9 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = "/static/"
 
-# Если вам не нужна дополнительная папка со статикой — можно убрать эту строку.
-# Либо создайте папку BASE_DIR/static/, чтобы Django не ругался.
-# STATICFILES_DIRS = [ BASE_DIR / "static" ]
 
-
-# Медиа-файлы (загружаемые пользователем)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
@@ -147,7 +137,6 @@ SIMPLE_JWT = {
 }
 
 
-# E-mail через Gmail SMTP
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
