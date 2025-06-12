@@ -1,5 +1,3 @@
-# real_estate_rental/users/views.py
-
 from django.shortcuts              import render, redirect
 from django.contrib.auth           import get_user_model, authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -31,7 +29,6 @@ from .serializers import RegisterSerializer
 User = get_user_model()
 
 
-# ——— HTML: смотреть профиль ——— #
 @login_required
 def profile_view(request):
     return render(request, 'users/profile.html', {
@@ -39,7 +36,6 @@ def profile_view(request):
     })
 
 
-# ——— HTML: редактировать профиль ——— #
 @login_required
 def profile_edit_view(request):
     if request.method == 'POST':
@@ -56,7 +52,6 @@ def profile_edit_view(request):
     })
 
 
-# ——— HTML: смена пароля ——— #
 @login_required
 def change_password_view(request):
     if request.method == 'POST':
@@ -74,7 +69,6 @@ def change_password_view(request):
     })
 
 
-# ——— HTML: регистрация ——— #
 def register_view(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
@@ -89,10 +83,10 @@ def register_view(request):
     return render(request, 'users/register.html', {'form': form})
 
 
-# ——— HTML: логин ——— #
+
 def login_view(request):
     if request.method == 'POST':
-        form = LoginForm(data=request.POST)  # only pass data, not request
+        form = LoginForm(data=request.POST) 
         if form.is_valid():
             user = form.cleaned_data['user']
             login(request, user)
@@ -102,13 +96,13 @@ def login_view(request):
     return render(request, 'users/login.html', {'form': form})
 
 
-# ——— HTML: логаут ——— #
+
 def logout_view(request):
     logout(request)
     return redirect('login')
 
 
-# ——— HTML: запрос сброса пароля ——— #
+
 def password_reset_form_view(request):
     message = ''
     if request.method == 'POST':
@@ -134,7 +128,7 @@ def password_reset_form_view(request):
     })
 
 
-# ——— HTML: подтверждение сброса ——— #
+
 def password_reset_confirm_view(request, uidb64, token):
     error = ''
     validlink = False

@@ -1,20 +1,24 @@
 import os
 from pathlib import Path
 from datetime import timedelta
-
 from dotenv import load_dotenv
+from django.utils.translation import gettext_lazy as _
+import dj_database_url
 
+# Загрузка переменных из .env
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+# Безопасность
+SECRET_KEY = os.getenv("SECRET_KEY", "fallback-secret-key")
+DEBUG = os.getenv("DEBUG", "True") == "True"
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
-DEBUG = True
+if not DEBUG:
+    ALLOWED_HOSTS += [".onrender.com"]
 
-ALLOWED_HOSTS = []
-
-
+# Приложения
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -32,10 +36,11 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = "users.User"
 
-
+# Middleware
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -45,6 +50,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "real_estate_rental.urls"
 
+# Шаблоны
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -63,70 +69,57 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "real_estate_rental.wsgi.application"
 
-
+# База данных
 DATABASES = {
     "default": {
-        "ENGINE":   os.getenv("DB_ENGINE",   "django.db.backends.sqlite3"),
-        "NAME":     os.getenv("DB_NAME",     BASE_DIR / "db.sqlite3"),
-        "USER":     os.getenv("DB_USER",     ""),
-        "PASSWORD": os.getenv("DB_PASSWORD", ""),
-        "HOST":     os.getenv("DB_HOST",     ""),
-        "PORT":     os.getenv("DB_PORT",     ""),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "5432"),
     }
 }
 
+if not DEBUG:
+    DATABASES["default"] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
+# Валидация паролей
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "UserAttributeSimilarityValidator"
-        ),
-    },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "MinimumLengthValidator"
-        ),
-    },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "CommonPasswordValidator"
-        ),
-    },
-    {
-        "NAME": (
-            "django.contrib.auth.password_validation."
-            "NumericPasswordValidator"
-        ),
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-
-LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+# Локализация и мультиязычность
+LANGUAGE_CODE = "en"
+LANGUAGES = [
+    ("en", _("English")),
+    ("ru", _("Russian")),
+    ("kk", _("Kazakh")),
+]
+LOCALE_PATHS = [BASE_DIR / "locale"]
 USE_I18N = True
+USE_L10N = True
 USE_TZ = True
+TIME_ZONE = "Asia/Almaty"
 
-
+# Статика и медиа
 STATIC_URL = "/static/"
-
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-
-DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-
+# DRF и JWT
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ],
+    ]
 }
-
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
@@ -136,7 +129,7 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
 }
 
-
+# Email
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
@@ -145,7 +138,10 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+# Авто поле
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# Логгирование
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,

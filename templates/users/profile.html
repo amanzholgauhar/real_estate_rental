@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Your Profile{% endblock %}
+{% block title %}{% trans "Your Profile" %}{% endblock %}
 
 {% block content %}
 <div class="max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-10 p-8">
@@ -9,24 +10,24 @@
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M5.121 17.804A13.937 13.937 0 0112 15c2.48 0 4.78.72 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
     </svg>
-    Your Profile
+    {% trans "Your Profile" %}
   </h2>
 
   <div class="space-y-4 text-gray-700">
     <div class="flex justify-between items-center">
-      <span class="font-medium">Username:</span>
+      <span class="font-medium">{% trans "Username:" %}</span>
       <span>{{ user.username }}</span>
     </div>
     <div class="flex justify-between items-center">
-      <span class="font-medium">Email:</span>
+      <span class="font-medium">{% trans "Email:" %}</span>
       <span>{{ user.email }}</span>
     </div>
     <div class="flex justify-between items-center">
-      <span class="font-medium">First Name:</span>
+      <span class="font-medium">{% trans "First Name:" %}</span>
       <span>{{ user.first_name }}</span>
     </div>
     <div class="flex justify-between items-center">
-      <span class="font-medium">Last Name:</span>
+      <span class="font-medium">{% trans "Last Name:" %}</span>
       <span>{{ user.last_name }}</span>
     </div>
   </div>
@@ -41,12 +42,12 @@
                  002 2h11a2 2 0 002-2v-5m-5-9l5 5m0 
                  0L13 5m5 5H13" />
       </svg>
-      Edit Profile
+      {% trans "Edit Profile" %}
     </a>
   </div>
 
   <div class="mt-8">
-    <h3 class="text-2xl font-semibold text-gray-800 mb-4">Your Properties</h3>
+    <h3 class="text-2xl font-semibold text-gray-800 mb-4">{% trans "Your Properties" %}</h3>
     <ul class="space-y-3">
       {% for prop in user.properties.all %}
       <li class="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow">
@@ -60,7 +61,7 @@
                        002 2h11a2 2 0 002-2v-5m-5-9l5 5m0 
                        0L13 5m5 5H13"/>
             </svg>
-            Edit
+            {% trans "Edit" %}
           </a>
           <form method="post" action="{% url 'delete_property' prop.pk %}" class="inline-block">
             {% csrf_token %}
@@ -70,13 +71,13 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                       d="M6 18L18 6M6 6l12 12"/>
               </svg>
-              Delete
+              {% trans "Delete" %}
             </button>
           </form>
         </div>
       </li>
       {% empty %}
-      <li class="text-gray-500">You have no properties yet.</li>
+      <li class="text-gray-500">{% trans "You have no properties yet." %}</li>
       {% endfor %}
     </ul>
   </div>
@@ -88,7 +89,7 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M12 4v16m8-8H4"/>
       </svg>
-      Add Property
+      {% trans "Add Property" %}
     </a>
     <a href="{% url 'my_bookings' %}"
        class="inline-flex items-center bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-4 rounded-lg transition">
@@ -98,7 +99,7 @@
                  002-2v-5a2 2 0 00-2-2h-2m-8 0H6a2 2 0 
                  00-2 2v5a2 2 0 002 2h2"/>
       </svg>
-      My Bookings
+      {% trans "My Bookings" %}
     </a>
     <a href="{% url 'logout' %}"
        class="inline-flex items-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition">
@@ -108,7 +109,7 @@
                  01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 
                  2 0 012 2v1"/>
       </svg>
-      Logout
+      {% trans "Logout" %}
     </a>
   </div>
 </div>

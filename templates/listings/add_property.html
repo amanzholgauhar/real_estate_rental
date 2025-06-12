@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Add Property{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Add Property" %}{% endblock %}
 
 {% block content %}
 <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-lg mt-10 p-8">
-  <h2 class="text-3xl font-semibold text-center text-blue-600 mb-6">Add New Property</h2>
+  <h2 class="text-3xl font-semibold text-center text-blue-600 mb-6">{% trans "Add New Property" %}</h2>
   <form method="post" enctype="multipart/form-data" class="space-y-6">
     {% csrf_token %}
     {{ form.non_field_errors }}
@@ -14,7 +16,7 @@
           {{ field.label }}
         </label>
         <div class="mt-1">
-          {{ field }}  {# теперь у всех полей есть border-black #}
+          {{ field }}
         </div>
         {% if field.help_text %}
           <p class="text-xs text-gray-500 mt-1">{{ field.help_text }}</p>
@@ -28,7 +30,7 @@
     <div class="text-center">
       <button type="submit"
               class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition">
-        Save Property
+        {% trans "Save Property" %}
       </button>
     </div>
   </form>
@@ -36,7 +38,7 @@
   <div class="mt-6 text-center">
     <a href="{% url 'property_list' %}"
        class="inline-block bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg transition">
-      Back to Property List
+      {% trans "Back to Property List" %}
     </a>
   </div>
 </div>

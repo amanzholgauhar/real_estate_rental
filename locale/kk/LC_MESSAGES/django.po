@@ -1,0 +1,168 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: real_estate_rental 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-13 00:00+0000\n"
+"PO-Revision-Date: 2025-06-13 00:00+0000\n"
+"Last-Translator: Your Name <you@example.com>\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "English"
+msgstr "Ағылшын"
+
+msgid "Русский"
+msgstr "Орыс"
+
+msgid "Kazakh"
+msgstr "Қазақ"
+
+msgid "Real Estate"
+msgstr "Жылжымайтын мүлік"
+
+msgid "Home"
+msgstr "Басты бет"
+
+msgid "Profile"
+msgstr "Профиль"
+
+msgid "Logout"
+msgstr "Шығу"
+
+msgid "Register"
+msgstr "Тіркелу"
+
+msgid "Login"
+msgstr "Кіру"
+
+msgid "Real Estate Rental. All rights reserved."
+msgstr "Жылжымайтын мүлікті жалға беру. Барлық құқықтар қорғалған."
+
+msgid "Add Property"
+msgstr "Нысан қосу"
+
+msgid "Add New Property"
+msgstr "Жаңа нысан қосу"
+
+msgid "Save Property"
+msgstr "Нысанды сақтау"
+
+msgid "Back to Property List"
+msgstr "Нысандар тізіміне оралу"
+
+msgid "Create Booking"
+msgstr "Бронь жасау"
+
+msgid "Booking Form"
+msgstr "Брондау формасы"
+
+msgid "Book Now"
+msgstr "Қазір брондау"
+
+msgid "Delete Property"
+msgstr "Нысанды жою"
+
+msgid ""
+"\n"
+"      Are you sure you want to delete the add<br><strong>\"%(title)s\"</strong>?\n"
+"    "
+msgstr ""
+"\n"
+"      Сіз <br><strong>\"%(title)s\"</strong> хабарландыруын жойғыңыз келетініне сенімдісіз бе?\n"
+"    "
+
+msgid "Yes, delete"
+msgstr "Иә, жою"
+
+msgid "Cancel"
+msgstr "Бас тарту"
+
+msgid "Edit Booking"
+msgstr "Брондауды өңдеу"
+
+msgid "Status"
+msgstr "Күйі"
+
+msgid "Save"
+msgstr "Сақтау"
+
+msgid "Edit Property"
+msgstr "Нысанды өңдеу"
+
+msgid "Save Changes"
+msgstr "Өзгерістерді сақтау"
+
+msgid "My Bookings"
+msgstr "Менің брондауларым"
+
+msgid "Edit"
+msgstr "Өңдеу"
+
+msgid "No bookings found."
+msgstr "Брондаулар табылмады."
+
+msgid "Average Rating:"
+msgstr "Орташа рейтинг:"
+
+msgid "No reviews yet"
+msgstr "Пікірлер әлі жоқ"
+
+msgid "Reviews"
+msgstr "Пікірлер"
+
+msgid "Edit your review"
+msgstr "Пікірді өңдеу"
+
+msgid "No reviews yet."
+msgstr "Пікірлер әлі жоқ."
+
+msgid "Leave a review"
+msgstr "Пікір қалдыру"
+
+msgid "Available Properties"
+msgstr "Қолжетімді нысандар"
+
+msgid "Filters"
+msgstr "Сүзгілер"
+
+msgid "Search"
+msgstr "Іздеу"
+
+msgid "Location"
+msgstr "Орналасуы"
+
+msgid "Max Price"
+msgstr "Максималды баға"
+
+msgid "Apply Filters"
+msgstr "Сүзгілерді қолдану"
+
+msgid "No Image"
+msgstr "Сурет жоқ"
+
+msgid "Price:"
+msgstr "Бағасы:"
+
+msgid "Rating:"
+msgstr "Рейтинг:"
+
+msgid "No reviews"
+msgstr "Пікірлер жоқ"
+
+msgid "Phone:"
+msgstr "Телефон:"
+
+msgid "Owner:"
+msgstr "Иесі:"
+
+msgid "View"
+msgstr "Көру"
+
+msgid "Book"
+msgstr "Брондау"
+
+msgid "No properties found."
+msgstr "Нысандар табылмады."

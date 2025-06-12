@@ -1,9 +1,10 @@
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ request.LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Real Estate{% endblock %}</title>
+  <title>{% block title %}{% trans "Real Estate" %}{% endblock %}</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
 </head>
 <body class="bg-gray-100 text-gray-800 font-sans leading-relaxed">
@@ -11,18 +12,34 @@
   <!-- HEADER -->
   <header class="bg-white shadow-md">
     <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+
+      <!-- Logo -->
       <a href="{% url 'property_list' %}" class="flex items-center space-x-2">
         <span class="text-3xl">🏠</span>
-        <span class="text-2xl font-bold text-blue-600">Real Estate</span>
+        <span class="text-2xl font-bold text-blue-600">{% trans "Real Estate" %}</span>
       </a>
+
+      <!-- Language Switcher -->
+      <form action="{% url 'set_language' %}" method="post" id="language-form" class="mr-4">
+        {% csrf_token %}
+        <select name="language"
+                onchange="document.getElementById('language-form').submit();"
+                class="bg-white border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring focus:border-blue-300">
+          <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+          <option value="ru" {% if request.LANGUAGE_CODE == 'ru' %}selected{% endif %}>Русский</option>
+          <option value="kk" {% if request.LANGUAGE_CODE == 'kk' %}selected{% endif %}>Қазақша</option>
+        </select>
+      </form>
+
+      <!-- Navigation -->
       <nav class="space-x-6">
         {% if request.user.is_authenticated %}
-          <a href="{% url 'property_list' %}" class="hover:text-blue-600">Home</a>
-          <a href="{% url 'profile_view' %}" class="hover:text-blue-600">Profile</a>
-          <a href="{% url 'logout' %}" class="text-red-500 hover:text-red-700">Logout</a>
+          <a href="{% url 'property_list' %}" class="hover:text-blue-600">{% trans "Home" %}</a>
+          <a href="{% url 'profile_view' %}" class="hover:text-blue-600">{% trans "Profile" %}</a>
+          <a href="{% url 'logout' %}" class="text-red-500 hover:text-red-700">{% trans "Logout" %}</a>
         {% else %}
-          <a href="{% url 'register' %}" class="hover:text-blue-600">Register</a>
-          <a href="{% url 'login' %}" class="hover:text-blue-600">Login</a>
+          <a href="{% url 'register' %}" class="hover:text-blue-600">{% trans "Register" %}</a>
+          <a href="{% url 'login' %}" class="hover:text-blue-600">{% trans "Login" %}</a>
         {% endif %}
       </nav>
     </div>
@@ -35,7 +52,7 @@
 
   <!-- FOOTER -->
   <footer class="mt-12 py-6 bg-white text-center text-sm text-gray-600">
-    &copy; 2025 Real Estate Rental. All rights reserved.
+    &copy; 2025 {% trans "Real Estate Rental. All rights reserved." %}
   </footer>
 
 </body>

@@ -1,11 +1,17 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}{{ property.title }} — Review{% endblock %}
+{% block title %}{{ property.title }} — {% trans "Review" %}{% endblock %}
 
 {% block content %}
 <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg mt-10 p-8">
   <h2 class="text-2xl font-semibold text-center text-blue-600 mb-6">
-    {{ property.title }} — {{ form.instance.pk|yesno:"Edit,Leave a" }} Review
+    {{ property.title }} —
+    {% if form.instance.pk %}
+      {% trans "Edit Review" %}
+    {% else %}
+      {% trans "Leave a Review" %}
+    {% endif %}
   </h2>
 
   <form method="post" class="space-y-6">
@@ -27,7 +33,7 @@
     </div>
     <button type="submit"
             class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded">
-      Save Review
+      {% trans "Save Review" %}
     </button>
   </form>
 </div>

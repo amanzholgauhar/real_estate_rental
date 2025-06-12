@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
-{% block title %}Create Booking{% endblock %}
+{% block title %}{% trans "Create Booking" %}{% endblock %}
 
 {% block content %}
 <div class="max-w-xl mx-auto bg-gray-450 shadow-md rounded-lg p-8 mt-10">
-  <h2 class="text-3xl font-semibold text-center text-blue-600 mb-6">Booking Form</h2>
+  <h2 class="text-3xl font-semibold text-center text-blue-600 mb-6">{% trans "Booking Form" %}</h2>
 
   <!-- Форма бронирования -->
   <form method="post" class="space-y-6">
@@ -20,7 +21,7 @@
       <div>
         <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
         <div class="mt-1">
-          {{ field }} <!-- Отображение поля формы -->
+          {{ field }}
         </div>
         
         <!-- Ошибки для конкретного поля -->
@@ -33,7 +34,7 @@
     <!-- Кнопка отправки формы -->
     <div class="text-center">
       <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
-        Book Now
+        {% trans "Book Now" %}
       </button>
     </div>
   </form>
@@ -42,7 +43,7 @@
 <!-- Back to Property List -->
 <div class="mt-6 text-center">
   <a href="{% url 'property_list' %}" class="inline-block bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded transition duration-300">
-    Back to Property List
+    {% trans "Back to Property List" %}
   </a>
 </div>
 {% endblock %}

@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Edit Booking{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Edit Booking" %}{% endblock %}
+
 {% block content %}
 <div class="max-w-md mx-auto bg-white shadow-lg rounded-lg mt-10 p-8">
-  <h2 class="text-3xl font-semibold text-center text-blue-600 mb-6">Edit Booking</h2>
+  <h2 class="text-3xl font-semibold text-center text-blue-600 mb-6">{% trans "Edit Booking" %}</h2>
   <form method="post" class="space-y-6">
     {% csrf_token %}
 
@@ -12,7 +15,7 @@
     <div>
       <label for="{{ form.status.id_for_label }}" 
              class="block text-sm font-medium text-gray-700">
-        Status
+        {% trans "Status" %}
       </label>
       {{ form.status }}
       {% if form.status.errors %}
@@ -23,7 +26,7 @@
     <div class="text-center">
       <button type="submit" 
               class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition">
-        Save
+        {% trans "Save" %}
       </button>
     </div>
   </form>

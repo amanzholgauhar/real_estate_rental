@@ -1,5 +1,3 @@
-# listings/urls.py
-
 from django.urls import path
 from .views import (
     TestView,
@@ -19,7 +17,6 @@ from .views import (
 )
 
 urlpatterns = [
-    # ── HTML URLs ── #
     path('list/', property_list_view, name='property_list'),
     path('<int:pk>/', property_detail_view, name='property_detail'),
     path('add/', add_property_view, name='add_property'),
@@ -32,11 +29,9 @@ urlpatterns = [
     path('my-bookings/', my_bookings_view, name='my_bookings'),
     path('my-bookings/<int:pk>/edit/', edit_booking_view, name='edit_booking'),
 
-    # reviews
     path('<int:pk>/reviews/new/',  create_review, name='create_review'),
     path('reviews/<int:pk>/edit/', edit_review,  name='edit_review'),
 
-    # ── API URLs ── #
     path('api/test/', TestView.as_view(), name='api_test'),
     path('api/properties/', PropertyListCreateAPIView.as_view(), name='api_property_list_create'),
     path('api/properties/<int:pk>/', PropertyRetrieveUpdateDestroyAPIView.as_view(),
