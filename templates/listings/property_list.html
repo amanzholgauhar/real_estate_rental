@@ -124,12 +124,22 @@
             >
               {% trans "View" %}
             </a>
+          {% if user.is_authenticated %}
             <a
               href="{% url 'create_booking' %}?property_id={{ property.id }}"
               class="flex-1 text-center bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg transition"
             >
               {% trans "Book" %}
             </a>
+          {% else %}
+            <a
+              href="{% url 'login' %}?next={% url 'create_booking' %}?property_id={{ property.id }}"
+              class="flex-1 text-center bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg transition"
+            >
+              {% trans "Book" %}
+            </a>
+          {% endif %}
+
           </div>
         </div>
       </div>
